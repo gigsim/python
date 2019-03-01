@@ -1,0 +1,74 @@
+import os
+import random
+
+dice = [1, 2, 3, 4, 5, 6] * 2
+
+def roll(dice):
+    throw = []
+    for i in range(2):
+        random.shuffle(dice)
+        dice_roll = dice.pop()
+        throw.append(dice_roll)
+    return throw
+
+
+def total(throw):
+    total = 0
+    for dice in throw:
+        total += dice
+    return total
+
+
+def clear():
+    if os.name == 'nt':
+        os.system('CLS')
+    if os.name == 'posix':
+        os.system('clear')
+
+
+def print_results(tug_throw, player_throw):
+    clear()
+    print("The tug has a " + str(tug_throw) + " for a total of " + str(total(tug_throw)))
+    print("You have a " + str(player_throw) + " for a total of " + str(total(player_throw)))
+
+
+def check_7(tug_throw, player_throw):
+    if total(player_throw) == 7 and total(tug_throw) == 7:
+        print("Tie! Both of you got 7!\n")
+        play_again()
+    elif total(player_throw) == 7:
+        print("Congratulations! You got 7!\n")
+        play_again()
+    elif total(tug_throw) == 7:
+        print("Sorry, you lose. The tug got 7.\n")
+        play_again()
+
+
+def play_again():
+    tug_throw = []
+    player_throw = []
+    dice = [1, 2, 3, 4, 5, 6] * 2
+    game()
+
+
+def game():
+    choice = 0
+    clear()
+    print("WELCOME TO TUG-MASTER DICE!\n")
+    tug_throw = roll(dice)
+    player_throw = roll(dice)
+    while choice != "q":
+        print("The tug throw " + str(tug_throw) + " for a total of " + str(total(tug_throw)))
+        print("You have a " + str(player_throw) + " for a total of " + str(total(player_throw)))
+        check_7(tug_throw, player_throw)
+        choice = input("Do you want to (R)eplay or [Q]uit: ").lower()
+        clear()
+        if choice == "q":
+            print("Bye!")
+            exit()
+        elif choice == "r":
+            play_again()
+
+
+if __name__ == "__main__":
+    game()
